@@ -1,1 +1,128 @@
-<p>register works!</p>
+<form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <h2 class="register-form__title">Регистрация</h2>
+
+  <!-- Email -->
+  <div class="register-form__field">
+    <label class="register-form__label" for="email">Email</label>
+    <input id="email" class="register-form__input" type="email" formControlName="email" />
+    @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)) {
+      <div class="alert">
+        @if (registerForm.get('email')?.hasError('required')) {
+          <div>Email обязателен.</div>
+        }
+        @if (registerForm.get('email')?.hasError('email')) {
+          <div>Введите корректный email.</div>
+        }
+        @if (registerForm.get('email')?.hasError('emailTaken')) {
+          <div>Такой email уже зарегистрирован</div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Name -->
+  <div class="register-form__field">
+    <label class="register-form__label" for="name">Имя</label>
+    <input id="name" class="register-form__input" type="text" formControlName="name" />
+    @if (registerForm.get('name')?.invalid && (registerForm.get('name')?.dirty || registerForm.get('name')?.touched)) {
+      <div class="alert">
+        @if (registerForm.get('name')?.hasError('required')) {
+          <div>Имя обязательно.</div>
+        }
+        @if (registerForm.get('name')?.hasError('minlength')) {
+          <div>Минимум 4 символа.</div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Role -->
+  <div class="register-form__field">
+    <label class="register-form__label" for="role">Роль</label>
+    <select id="role" class="register-form__input" formControlName="role">
+      <option value="" disabled selected hidden>Выберите роль</option>
+      <option value="customer">Customer</option>
+      <option value="admin">Admin</option>
+    </select>
+    @if (registerForm.get('role')?.invalid && (registerForm.get('role')?.dirty || registerForm.get('role')?.touched)) {
+      <div class="alert">
+        @if (registerForm.get('role')?.hasError('required')) {
+          <div>Роль обязательна.</div>
+        }
+      </div>
+    }
+  </div>
+
+
+  <!-- Avatar -->
+  <div class="register-form__field">
+    <label class="register-form__label" for="avatar">Фото профиля</label>
+    <input
+      class="register-form__input"
+      type="file"
+      id="avatar"
+      (change)="onFileChange($event)"
+      accept="image/*"
+    />
+    @if (registerForm.get('avatar')?.invalid && (registerForm.get('avatar')?.dirty || registerForm.get('avatar')?.touched)) {
+      <div class="alert">
+        @if (registerForm.get('avatar')?.hasError('required')) {
+          <div>Файл обязателен.</div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Password -->
+  <div class="register-form__field">
+    <label class="register-form__label" for="password">Пароль</label>
+    <input id="password" class="register-form__input" type="password" formControlName="password" />
+    @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)) {
+      <div class="alert">
+        @if (registerForm.get('password')?.hasError('required')) {
+          <div>Пароль обязателен.</div>
+        }
+        @if (registerForm.get('password')?.hasError('minlength')) {
+          <div>Минимум 6 символов.</div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Confirm Password -->
+  <div class="register-form__field">
+    <label class="register-form__label" for="confirmPassword">Подтвердите пароль</label>
+    <input id="confirmPassword" class="register-form__input" type="password" formControlName="confirmPassword" />
+    @if (registerForm.get('confirmPassword')?.invalid && (registerForm.get('confirmPassword')?.dirty || registerForm.get('confirmPassword')?.touched)) {
+      <div class="alert">
+        @if (registerForm.get('confirmPassword')?.hasError('required')) {
+          <div>Подтверждение пароля обязательно.</div>
+        }
+        @if (registerForm.get('confirmPassword')?.hasError('minlength')) {
+          <div>Минимум 6 символов.</div>
+        }
+        @if (
+          !registerForm.get('confirmPassword')?.hasError('required') &&
+          !registerForm.get('confirmPassword')?.hasError('minlength') &&
+          registerForm.get('confirmPassword')?.errors
+        ) {
+          <div>Пароли не совпадают.</div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Submit -->
+  <div class="register-form__actions">
+    <div class="register-form-createUser">
+      <small><a [routerLink]="['/auth/login']">есть аккаунт?</a></small>
+    </div>
+    <button
+      class="register-form__button register-form__button--primary"
+      type="submit"
+      [disabled]="registerForm.invalid"
+    >
+      Зарегистрироваться
+    </button>
+  </div>
+</form>
