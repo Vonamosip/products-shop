@@ -1,1 +1,47 @@
-<p>login works!</p>
+<form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <h2 class="login-form__title">Вход в аккаунт</h2>
+  <div class="login-form__field">
+    <label class="login-form__label" for="email">Email</label>
+    <input class="login-form__input" type="email" formControlName="email" />
+    @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)) {
+      <div class="alert">
+        @if (loginForm.get('email')?.hasError('required')) {
+          <div>Email обязателен.</div>
+        }
+        @if (loginForm.get('email')?.hasError('email')) {
+          <div>Введите корректный email.</div>
+        }
+      </div>
+    }
+  </div>
+  <div class="login-form__field">
+    <label class="login-form__label" for="password">Пароль</label>
+    <div class="password-wrapper">
+      <input
+        class="login-form__input"
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="password"
+      />
+      <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+        {{ showPassword ? 'Скрыть' : 'Показать' }}
+      </button>
+    </div>
+
+    @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)) {
+      <div class="alert">
+        @if (loginForm.get('password')?.hasError('required')) {
+          <div>Пароль обязателен</div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="login-form__create-user">
+    <small><a [routerLink]="['/auth/register']">нет аккаунта?</a></small>
+  </div>
+  <div class="login-form__actions">
+    <button class="login-form__button login-form__button--primary" type="submit" (ngSubmit)="onSubmit()" [disabled]="loginForm.invalid">
+      Войти
+    </button>
+  </div>
+</form>
